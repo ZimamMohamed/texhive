@@ -15,54 +15,40 @@ form.addEventListener('submit', (e) => {
 });
 
 // Simple form submission alert
-document.addEventListener('DOMContentLoaded', () => {
-    const contactForm = document.getElementById('contact-form');
-    const successModal = document.getElementById('success-modal');
-    const closeModal = document.getElementById('close-modal');
+document.addEventListener("DOMContentLoaded", () => {
+  typeEffect();
+});
 
-    let submitting = false;
-
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Stop normal submission
-        if (submitting) return; // prevent double submission
-        submitting = true;
-
-        const formData = new FormData(contactForm);
-        const submitButton = contactForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-
-        try {
-            // Use Formspree AJAX URL
-            const response = await fetch('https://formspree.io/f/mblwlgry', {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            });
-
-            if (response.ok) {
-                contactForm.reset();
-                successModal.style.display = 'flex'; // show success modal
-            } else {
-                alert('Oops! Something went wrong. Please try again.');
-            }
-        } catch (error) {
-            alert('Oops! Something went wrong. Please try again.');
-        } finally {
-            submitButton.disabled = false;
-            submitting = false;
-        }
+const contact = document.querySelector('form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    fetch(form.action, {
+      method: form.method,
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        alert('✅ Thank you! Your message has been sent successfully.');
+        form.reset();
+      } else {
+        alert('❌ Oops! Something went wrong. Please try again.');
+      }
     });
+  });
 
-    // Close modal on X
-    closeModal.addEventListener('click', () => {
-        successModal.style.display = 'none';
-    });
+  const menuIcon = document.getElementById('menuIcon');
+const navLinks = document.getElementById('navLinks');
 
-    // Close modal on outside click
-    window.addEventListener('click', (e) => {
-        if (e.target === successModal) {
-            successModal.style.display = 'none';
-        }
-    });
+menuIcon.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+  menuIcon.classList.toggle('active');
+});
+
+// Close menu when clicking a link (optional)
+document.querySelectorAll('.nav-links li a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+    menuIcon.classList.remove('active');
+  });
 });
 
